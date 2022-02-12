@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="$(arg name)">
+
+   <!-- Robot name parameter -->
+   <xacro:arg name="name" default="mycobot_280"/>
+
+   <!-- Import main macro -->
+   <xacro:include filename="$(find mycobot_280_description)/urdf/mycobot_280_macro.xacro"/>
+
+   <!-- Parameters -->
+   <xacro:arg name="prefix" default="" />
+   <xacro:arg name="joint_limit_params" default=""/>
+   <xacro:arg name="kinematics_params" default=""/>
+   <xacro:arg name="physical_params" default=""/>
+   <xacro:arg name="visual_params" default=""/>
+
+    <!-- Simulation parameters -->
+   <xacro:arg name="use_fake_hardware" default="true" />
+
+   <!-- Initial position for fake hardware -->
+   <xacro:arg name="initial_positions_file" default="$(find mycobot_280_description)/config/initial_positions.yaml"/>
+
+   <!-- Create link fixed to the "world" -->
+   <link name="world" />
+
+   <!-- Arm -->
+   <xacro:mycobot_280_robot
+     name="$(arg name)"
+     prefix="$(arg prefix)"
+     parent="world"
+     joint_limits_parameters_file="$(arg joint_limit_params)"
+     kinematics_parameters_file="$(arg kinematics_params)"
+     physical_parameters_file="$(arg physical_params)"
+     visual_parameters_file="$(arg visual_params)"
+     initial_positions_file="$(arg initial_positions_file)"
+     use_fake_hardware="$(arg use_fake_hardware)">
+     <origin xyz="0 0 0" rpy="0 0 0" />          <!-- position robot in the world -->
+   </xacro:mycobot_280_robot>
+
+</robot>

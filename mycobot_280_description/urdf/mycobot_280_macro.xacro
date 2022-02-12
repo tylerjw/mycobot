@@ -1,0 +1,224 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <!--
+    NOTE this is NOT a URDF. It cannot directly be loaded by consumers
+    expecting a flattened '.urdf' file. See the top-level '.xacro' for that
+    (but note that .xacro must still be processed by the xacro command).
+  -->
+
+  <xacro:include filename="$(find mycobot_280_description)/urdf/inc/mycobot_common.xacro" />
+
+  <xacro:macro name="mycobot_280_robot" params="
+    name
+    prefix
+    parent
+    *origin
+    joint_limits_parameters_file
+    kinematics_parameters_file
+    physical_parameters_file
+    visual_parameters_file
+    initial_positions_file
+    use_fake_hardware" >
+
+    <!-- Load configuration data from the provided .yaml files -->
+    <xacro:read_model_data
+      joint_limits_parameters_file="${joint_limits_parameters_file}"
+      kinematics_parameters_file="${kinematics_parameters_file}"
+      physical_parameters_file="${physical_parameters_file}"
+      visual_parameters_file="${visual_parameters_file}"/>
+
+    <!-- ROS2 control include -->
+    <xacro:include filename="$(find mycobot_280_description)/urdf/mycobot_280.ros2_control.xacro" />
+
+    <!-- ROS2 control instance -->
+    <!-- Note! The joint limit parameters are parsed and declared in 'read_model_data' xacro. -->
+    <xacro:mycobot_280_ros2_control name="${name}" prefix="${prefix}"
+      use_fake_hardware="${use_fake_hardware}"
+      initial_positions_file="${initial_positions_file}"
+      joint1_lower_limit="${joint1_lower_limit}"
+      joint1_upper_limit="${joint1_upper_limit}"
+      joint2_lower_limit="${joint2_lower_limit}"
+      joint2_upper_limit="${joint2_upper_limit}"
+      joint3_lower_limit="${joint3_lower_limit}"
+      joint3_upper_limit="${joint3_upper_limit}"
+      joint4_lower_limit="${joint4_lower_limit}"
+      joint4_upper_limit="${joint4_upper_limit}"
+      joint5_lower_limit="${joint5_lower_limit}"
+      joint5_upper_limit="${joint5_upper_limit}"
+      joint6_lower_limit="${joint6_lower_limit}"
+      joint6_upper_limit="${joint6_upper_limit}"/>
+
+    <!-- links -  main serial chain -->
+    <link name="${prefix}base_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 -1.5708"/>
+        <geometry>
+          <mesh filename="${base_visual_mesh}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 -1.5708"/>
+        <geometry>
+          <mesh filename="${base_collision_mesh}"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link1">
+      <visual>
+        <origin xyz="0 0 -0.06096" rpy="0 0 -1.5708"/>
+        <geometry>
+          <mesh filename="${link1_visual_mesh}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 -0.06096" rpy="0 0 -1.5708"/>
+        <geometry>
+          <mesh filename="${link1_collision_mesh}"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link2">
+      <visual>
+        <origin xyz="0 0 0.03256" rpy="0 -1.5708 0"/>
+        <geometry>
+          <mesh filename="${link2_visual_mesh}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.03256" rpy="0 -1.5708 0"/>
+        <geometry>
+          <mesh filename="${link2_collision_mesh}"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link3">
+      <visual>
+        <origin xyz="0 0 0.03056" rpy="0 -1.5708 0"/>
+        <geometry>
+          <mesh filename="${link3_visual_mesh}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.03056" rpy="0 -1.5708 0"/>
+        <geometry>
+          <mesh filename="${link3_collision_mesh}"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link4">
+      <visual>
+        <origin xyz="0 0 -0.03356" rpy="-1.5708 0 0"/>
+        <geometry>
+          <mesh filename="${link4_visual_mesh}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 -0.03356" rpy="-1.5708 0 0"/>
+        <geometry>
+          <mesh filename="${link4_collision_mesh}"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link5">
+      <visual>
+        <origin xyz="0 0 -0.038" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${link5_visual_mesh}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 -0.038" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${link5_collision_mesh}"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link6">
+      <visual>
+        <origin xyz="0 0 -0.012" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${link6_visual_mesh}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 -0.012" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${link6_collision_mesh}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- base_joint fixes base_link to the environment -->
+    <joint name="${prefix}base_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}" />
+      <child link="${prefix}base_link" />
+    </joint>
+
+    <!-- joints - main serial chain -->
+    <joint name="${prefix}joint1" type="revolute">
+      <parent link="${prefix}base_link" />
+      <child link="${prefix}link1" />
+      <origin xyz="${joint1_x} ${joint1_y} ${joint1_z}" rpy="${joint1_roll} ${joint1_pitch} ${joint1_yaw}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${joint1_lower_limit}" upper="${joint1_upper_limit}"
+        effort="${joint1_effort_limit}" velocity="${joint1_velocity_limit}"/>
+      <dynamics damping="0" friction="0"/>
+    </joint>
+    <joint name="${prefix}joint2" type="revolute">
+      <parent link="${prefix}link1" />
+      <child link="${prefix}link2" />
+      <origin xyz="${joint2_x} ${joint2_y} ${joint2_z}" rpy="${joint2_roll} ${joint2_pitch} ${joint2_yaw}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${joint2_lower_limit}" upper="${joint2_upper_limit}"
+        effort="${joint2_effort_limit}" velocity="${joint2_velocity_limit}"/>
+      <dynamics damping="0" friction="0"/>
+    </joint>
+    <joint name="${prefix}joint3" type="revolute">
+      <parent link="${prefix}link2" />
+      <child link="${prefix}link3" />
+      <origin xyz="${joint3_x} ${joint3_y} ${joint3_z}" rpy="${joint3_roll} ${joint3_pitch} ${joint3_yaw}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${joint3_lower_limit}" upper="${joint3_upper_limit}"
+        effort="${joint3_effort_limit}" velocity="${joint3_velocity_limit}"/>
+      <dynamics damping="0" friction="0"/>
+    </joint>
+    <joint name="${prefix}joint4" type="revolute">
+      <parent link="${prefix}link3" />
+      <child link="${prefix}link4" />
+      <origin xyz="${joint4_x} ${joint4_y} ${joint4_z}" rpy="${joint4_roll} ${joint4_pitch} ${joint4_yaw}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${joint4_lower_limit}" upper="${joint4_upper_limit}"
+        effort="${joint4_effort_limit}" velocity="${joint4_velocity_limit}"/>
+      <dynamics damping="0" friction="0"/>
+    </joint>
+    <joint name="${prefix}joint5" type="revolute">
+      <parent link="${prefix}link4" />
+      <child link="${prefix}link5" />
+      <origin xyz="${joint5_x} ${joint5_y} ${joint5_z}" rpy="${joint5_roll} ${joint5_pitch} ${joint5_yaw}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${joint5_lower_limit}" upper="${joint5_upper_limit}"
+             effort="${joint5_effort_limit}" velocity="${joint5_velocity_limit}"/>
+      <dynamics damping="0" friction="0"/>
+    </joint>
+    <joint name="${prefix}joint6" type="revolute">
+      <parent link="${prefix}link5" />
+      <child link="${prefix}link6" />
+      <origin xyz="${joint6_x} ${joint6_y} ${joint6_z}" rpy="${joint6_roll} ${joint6_pitch} ${joint6_yaw}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${joint6_lower_limit}" upper="${joint6_upper_limit}"
+             effort="${joint6_effort_limit}" velocity="${joint6_velocity_limit}"/>
+      <dynamics damping="0" friction="0"/>
+    </joint>
+
+    <!-- ROS-Industrial 'tool0' frame - all-zeros tool frame -->
+    <link name="${prefix}tool0"/>
+    <joint name="${prefix}link6-tool0" type="fixed">
+      <!-- default toolframe - X+ left, Y+ up, Z+ front -->
+      <origin xyz="0 0 0.075" rpy="0 0 0"/>
+      <parent link="${prefix}link6"/>
+      <child link="${prefix}tool0"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

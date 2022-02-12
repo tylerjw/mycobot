@@ -1,0 +1,71 @@
+mesh_files:
+  base:
+    visual:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/base.dae
+    collision:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/base.dae
+
+  link1:
+    visual:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/link1.dae
+    collision:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/link1.dae
+
+  link2:
+    visual:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/link2.dae
+    collision:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/link2.dae
+      mesh_files:
+
+  link3:
+    visual:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/link3.dae
+    collision:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/link3.dae
+
+  link4:
+    visual:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/link4.dae
+    collision:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/link4.dae
+
+  link5:
+    visual:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/link5.dae
+    collision:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/link5.dae
+
+  link6:
+    visual:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/link6.dae
+    collision:
+      mesh:
+        package: mycobot_280_description
+        path: meshes/mycobot_280/link6.dae

@@ -1,0 +1,44 @@
+kinematics:
+  joint1:
+    x: 0
+    y: 0
+    z: 0.13156
+    roll: 0
+    pitch: 0
+    yaw: 0
+  joint2:
+    x: 0
+    y: 0
+    z: 0
+    roll: 0
+    pitch: 1.5708
+    yaw: -1.5708
+  joint3:
+    x: -0.1104
+    y: 0
+    z: 0
+    roll: 0
+    pitch: 0
+    yaw: 0
+  joint4:
+    x: -0.096
+    y: 0
+    z: 0.06462
+    roll: 0
+    pitch: 0
+    yaw: -1.5708
+  joint5:
+    x: 0
+    y: -0.07318
+    z: 0
+    roll: 1.5708
+    pitch: -1.5708
+    yaw: 0
+  joint6:
+    x: 0
+    y: 0.0456
+    z: 0
+    roll: -1.5708
+    pitch: 0
+    yaw: 0
+  hash: default_values_no_calib

@@ -1,0 +1,11 @@
+# Physical parameters
+
+inertia_parameters:
+  base_mass: 0.7346
+  link1_mass: 3.7810
+  link2_mass: 9.6905
+  link2_inertia_offset: 0
+  link3_mass: 3.0793
+  link4_mass: 0.8838
+  link5_mass: 0.9136
+  link6_mass: 0.3451
