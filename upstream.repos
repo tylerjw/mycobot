@@ -1,8 +1,8 @@
 repositories:
   serial-ros2:
     type: git
-    url: git@github.com:RoverRobotics-forks/serial-ros2.git
-    version: ae46504ae7d4a199ea9bba0e73a6f083bf172f80
+    url: git@github.com:tylerjw/serial-ros2.git
+    version: ros2
   fp:
     type: git
     url: https://github.com/tylerjw/fp

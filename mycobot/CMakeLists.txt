@@ -11,10 +11,12 @@ find_package(cppystruct REQUIRED)
 find_package(fmt REQUIRED)
 find_package(fp REQUIRED)
 find_package(range-v3 REQUIRED)
+find_package(serial REQUIRED)
 
 add_library(${PROJECT_NAME}
   src/bytearray.cpp
   src/command.cpp
+  src/detect.cpp
   src/mycobot.cpp
   src/process_received.cpp
   src/serialize.cpp
@@ -29,6 +31,7 @@ target_link_libraries(${PROJECT_NAME}
     fmt::fmt
     fp::fp
     range-v3::range-v3
+    serial::serial
 )
 
 install(

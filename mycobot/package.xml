@@ -13,6 +13,7 @@
   <depend>fmt</depend>
   <depend>fp</depend>
   <depend>range-v3</depend>
+  <depend>serial</depend>
 
   <test_depend>ament_cmake_catch2</test_depend>
   <test_depend>catch2</test_depend>
