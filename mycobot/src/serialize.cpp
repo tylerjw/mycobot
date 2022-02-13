@@ -1,5 +1,7 @@
 #include "mycobot/serialize.hpp"
 
+#include <cppystruct/cppystruct.h>
+
 #include <fp/all.hpp>
 #include <range/v3/all.hpp>
 #include <string>

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cppystruct/cppystruct.h>
-
 #include <cmath>
 #include <cstdint>
 #include <string>
