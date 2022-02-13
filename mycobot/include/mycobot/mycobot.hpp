@@ -2,8 +2,10 @@
 
 #include <serial/serial.h>
 
+#include <array>
 #include <fp/all.hpp>
 #include <memory>
+#include <string>
 
 #include "mycobot/command.hpp"
 #include "mycobot/process_received.hpp"
@@ -17,22 +19,19 @@ class MyCobot {
 
  public:
   /**
-   * @brief      Construct MyCobot with serial port settings
+   * @brief      Construct MyCobot with serial port settings.
    *
    * @param      port      The port
    * @param[in]  baudrate  The baudrate
    */
-  MyCobot(std::string const& port = "/dev/ttyAMA0", uint32_t baudrate = 115200)
-      : serial_port_{std::make_unique<serial::Serial>(
-            port, baudrate, serial::Timeout::simpleTimeout(1000))} {}
+  MyCobot(std::string const& port = "/dev/ttyAMA0", uint32_t baudrate = 115200);
 
   /**
-   * @brief      Constructs a new instance with an already configured Serial
+   * @brief      Constructs a new instance with an already configured Serial.
    *
    * @param      serial  The serial connection
    */
-  MyCobot(std::unique_ptr<serial::Serial> serial_port)
-      : serial_port_{std::move(serial_port)} {}
+  MyCobot(std::unique_ptr<serial::Serial> serial_port);
 
   /**
    * @brief      Send a Command to the robot
@@ -43,6 +42,24 @@ class MyCobot {
    * repose
    */
   fp::Result<response_t> send(Command const& command);
+
+  /**
+   * @brief      Gets the radians angles of the joints.
+   *
+   * @return     The radians.
+   */
+  fp::Result<std::array<double, 6>> get_radians();
+
+  /**
+   * @brief      Send a joint command with radian values
+   *
+   * @param[in]  radians  The radians
+   * @param[in]  speed    The speed (0 ~ 100)
+   *
+   * @return     Error if command failed, otherwise empty response
+   */
+  fp::Result<response_t> send_radians(std::array<double, 6> const& radians,
+                                      int8_t speed);
 };
 
 /**
