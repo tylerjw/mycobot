@@ -19,6 +19,6 @@ fp::Result<std::pair<size_t, size_t>> process_header(std::string const& data,
 response_t process_command(std::string const& data, ProtocolCode genre);
 
 fp::Result<response_t> process_received(std::string const& data,
-                                                  ProtocolCode genre);
+                                        ProtocolCode genre);
 
 }  // namespace mycobot

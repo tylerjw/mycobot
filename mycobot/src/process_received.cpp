@@ -41,7 +41,7 @@ fp::Result<std::pair<size_t, size_t>> process_header(std::string const& data,
 
   auto header = ranges::front(header_view) | ranges::to<std::vector>();
   size_t start_index = header.at(kHeaderPos).first + kHeaderSize;
-  size_t data_len = header.at(kDataLenPos).second;
+  size_t data_len = header.at(kDataLenPos).second - 2;
   ProtocolCode id = static_cast<ProtocolCode>(header.at(kCmdId).second);
 
   if (id == ProtocolCode::GET_BASIC_INPUT ||
@@ -52,8 +52,7 @@ fp::Result<std::pair<size_t, size_t>> process_header(std::string const& data,
   return std::make_pair(start_index, data_len);
 }
 
-response_t process_command(std::string const& data,
-                                     ProtocolCode genre) {
+response_t process_command(std::string const& data, ProtocolCode genre) {
   if (data.size() == 12 || data.size() == 8) {
     return data | views::chunk(2) | views::transform([](auto const& view) {
              return decode_int16(view | ranges::to<std::string>());
@@ -72,7 +71,7 @@ response_t process_command(std::string const& data,
 }
 
 fp::Result<response_t> process_received(std::string const& data,
-                                                  ProtocolCode genre) {
+                                        ProtocolCode genre) {
   if (genre == ProtocolCode::GET_SSID_PWD) {
     auto const pwd = process_ssid_pwd_response(data);
     return response_t(pwd.begin(), pwd.end());

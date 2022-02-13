@@ -1,9 +1,10 @@
-#include <mycobot/mycobot.hpp>
-#include <mycobot/command.hpp>
+#include <chrono>
 #include <fp/all.hpp>
+#include <mycobot/command.hpp>
+#include <mycobot/mycobot.hpp>
+#include <thread>
 
-int main()
-{
+int main() {
   auto mycobot = mycobot::make_mycobot();
 
   if (!mycobot) {
@@ -11,52 +12,65 @@ int main()
     return static_cast<int>(mycobot.error().code);
   }
 
-  // set color
+  // power on
   {
-    auto const result = mycobot->send(mycobot::set_color(255, 0, 0));
-    if(!result) {
+    auto const result = mycobot->send(mycobot::power_on());
+    if (!result) {
       fmt::print("{}\n", result.error());
       return static_cast<int>(result.error().code);
     }
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
   }
 
-  // get version
+  // move to origin
   {
-    auto const result = mycobot->send(mycobot::version());
-    if(!result) {
+    auto const result = mycobot->send(
+        mycobot::send_angles(std::array<double, 6>{0, 0, 0, 0, 0, 0}, 50));
+    if (!result) {
       fmt::print("{}\n", result.error());
-      return static_cast<int>(result.error().code);
     }
-    fmt::print("version: {}\n", result.value());
   }
+  std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
   // read joint angles
   auto const angles = mycobot->send(mycobot::get_angles());
-  if(!angles) {
+  if (!angles) {
     fmt::print("{}\n", angles.error());
-    return static_cast<int>(angles.error().code);
-  }
-  fmt::print("get_angles: {}\n", angles.value());
-
-  auto const new_angles = std::array<double, 6>{
-    angles->at(0) + 2.0,
-    angles->at(1) - 2.0,
-    angles->at(2) + 2.0,
-    angles->at(3) - 2.0,
-    angles->at(4) + 2.0,
-    angles->at(5) - 2.0,
-  };
-
-  auto const result = mycobot->send(mycobot::send_angles(new_angles, 20));
-  if(!result) {
-    fmt::print("{}\n", result.error());
-    return static_cast<int>(result.error().code);
+    // return static_cast<int>(angles.error().code);
+  } else {
+    fmt::print("get_angles: {}\n", angles.value());
   }
 
-  // release all servos
+  // move a bit
+  {
+    auto const result = mycobot->send(mycobot::send_angles(
+        std::array<double, 6>{
+            mycobot::int2angle(angles->at(0)) + 1.0,
+            mycobot::int2angle(angles->at(1)) - 1.0,
+            mycobot::int2angle(angles->at(2)) + 1.0,
+            mycobot::int2angle(angles->at(3)) - 1.0,
+            mycobot::int2angle(angles->at(4)) + 1.0,
+            mycobot::int2angle(angles->at(5)) - 1.0,
+        },
+        100));
+    if (!result) {
+      fmt::print("{}\n", result.error());
+    }
+  }
+  std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+
+  // // release all servos
   {
     auto const result = mycobot->send(mycobot::release_all_servos());
-    if(!result) {
+    if (!result) {
+      fmt::print("{}\n", result.error());
+    }
+  }
+
+  // power off
+  {
+    auto const result = mycobot->send(mycobot::power_off());
+    if (!result) {
       fmt::print("{}\n", result.error());
       return static_cast<int>(result.error().code);
     }

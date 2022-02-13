@@ -1,6 +1,6 @@
-#include <string>
 #include <catch2/catch.hpp>
 #include <limits>
+#include <string>
 
 #include "mycobot/serialize.hpp"
 
@@ -45,9 +45,10 @@ SCENARIO("serialize functions serialize data for serial communication",
     WHEN("We encode the value") {
       auto const data = encode(value);
 
-      THEN("The data should be std::string{(value >> 8) & 0xFF, value & 0xFF}") {
+      THEN(
+          "The data should be std::string{(value >> 8) & 0xFF, value & 0xFF}") {
         REQUIRE(data == std::string{static_cast<char>((value >> 8) & 0xFF),
-                                  static_cast<char>(value & 0xFF)});
+                                    static_cast<char>(value & 0xFF)});
       }
     }
 
