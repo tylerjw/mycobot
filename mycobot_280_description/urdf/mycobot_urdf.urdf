@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter" >
-	
+
 <xacro:property name="width" value=".2" />
 
 
@@ -133,7 +133,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="base"/>
     <child link="link1"/>
-    <origin xyz= "0 0 0.13156" rpy = "0 0 0"/>  
+    <origin xyz= "0 0 0.13156" rpy = "0 0 0"/>
   </joint>
 
 
@@ -142,7 +142,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link1"/>
     <child link="link2"/>
-    <origin xyz= "0 0  0" rpy = "0 1.5708 -1.5708"/>  
+    <origin xyz= "0 0  0" rpy = "0 1.5708 -1.5708"/>
   </joint>
 
 
@@ -151,7 +151,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link2"/>
     <child link="link3"/>
-    <origin xyz= "  -0.1104 0 0   " rpy = "0 0 0"/>  
+    <origin xyz= "  -0.1104 0 0   " rpy = "0 0 0"/>
   </joint>
 
 
@@ -161,7 +161,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link3"/>
     <child link="link4"/>
-    <origin xyz= "-0.096 0 0.06462" rpy = "0 0 -1.5708"/>  
+    <origin xyz= "-0.096 0 0.06462" rpy = "0 0 -1.5708"/>
   </joint>
 
   <joint name="joint5" type="revolute">
@@ -169,7 +169,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link4"/>
     <child link="link5"/>
-    <origin xyz= "0 -0.07318 0" rpy = "1.5708 -1.5708 0"/>  
+    <origin xyz= "0 -0.07318 0" rpy = "1.5708 -1.5708 0"/>
   </joint>
 
   <joint name="joint6" type="revolute">
@@ -177,10 +177,9 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link5"/>
     <child link="link6"/>
-    <origin xyz= "0 0.0456 0" rpy = "-1.5708 0 0"/>  
+    <origin xyz= "0 0.0456 0" rpy = "-1.5708 0 0"/>
   </joint>
 
 
 
 </robot>
-

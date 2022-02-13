@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name> cppystruct</name>
+  <version>0.0.0</version>
+  <description>Vendored C++17, header only, constexpr clone of Python's struct module</description>
+  <maintainer email="squirrel428@pm.me">tyler</maintainer>
+  <license>CC0-1.0</license>
+
+  <url type="repository">https://github.com/karkason/cppystruct</url>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
