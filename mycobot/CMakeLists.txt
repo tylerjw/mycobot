@@ -14,6 +14,7 @@ find_package(range-v3 REQUIRED)
 
 add_library(${PROJECT_NAME}
   src/bytearray.cpp
+  src/command.cpp
   src/mycobot.cpp
   src/process_received.cpp
   src/serialize.cpp

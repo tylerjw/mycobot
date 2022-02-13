@@ -25,6 +25,10 @@ int16_t decode_int16(bytearray const& data) {
                        data.size())));
 }
 
+bytearray encode(char data) {
+  return to_bytearray(pystruct::pack(PY_STRING("b"), data));
+}
+
 bytearray encode(int8_t data) {
   return to_bytearray(pystruct::pack(PY_STRING("b"), data));
 }

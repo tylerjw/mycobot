@@ -3,7 +3,7 @@
 <package format="3">
   <name>mycobot</name>
   <version>0.0.0</version>
-  <description>C++ Interface for MyCobot</description>
+  <description>C++ Interface for MyCobot 280</description>
   <maintainer email="squirrel428@pm.me">Tyler Weaver</maintainer>
   <license>BSD-3-Clause</license>
 

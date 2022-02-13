@@ -126,6 +126,23 @@ SCENARIO("serialize functions serialize data for serial communication",
       }
     }
   }
+
+  GIVEN("A int8_t, int16_t, and a char") {
+    int8_t const a =
+        GENERATE(take(10, random(std::numeric_limits<int8_t>::min(),
+                                 std::numeric_limits<int8_t>::max())));
+    int16_t const b =
+        GENERATE(take(10, random(std::numeric_limits<int16_t>::min(),
+                                 std::numeric_limits<int16_t>::max())));
+    char const c = GENERATE(take(10, random(std::numeric_limits<char>::min(),
+                                            std::numeric_limits<char>::max())));
+
+    WHEN("We use the variadic encode to encode them into a bytearray") {
+      bytearray const data = encode(a, b, c);
+
+      THEN("We expect the size to be 4") { REQUIRE(data.size() == 4); }
+    }
+  }
 }
 
 }  // namespace mycobot

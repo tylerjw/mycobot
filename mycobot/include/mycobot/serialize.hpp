@@ -12,8 +12,17 @@ namespace mycobot {
 
 int8_t decode_int8(bytearray const& data);
 int16_t decode_int16(bytearray const& data);
+
+bytearray encode(char data);
 bytearray encode(int8_t data);
 bytearray encode(int16_t data);
+
+template <typename T, typename... Args>
+bytearray encode(T first, Args... args) {
+  auto ret = bytearray{}.append(encode(first));
+  auto rest = encode(args...);
+  return ret.append(rest);
+}
 
 constexpr int16_t angle2int(double angle) {
   return static_cast<int16_t>(std::round(angle * 100.0));
