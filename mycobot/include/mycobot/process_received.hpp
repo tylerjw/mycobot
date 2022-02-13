@@ -5,19 +5,20 @@
 #include <string>
 #include <vector>
 
-#include "mycobot/bytearray.hpp"
 #include "mycobot/protocol_code.hpp"
 
 namespace mycobot {
 
-bytearray process_ssid_pwd_response(bytearray const& data);
+using response_t = std::vector<int16_t>;
 
-fp::Result<std::pair<size_t, size_t>> process_header(bytearray const& data,
+std::string process_ssid_pwd_response(std::string const& data);
+
+fp::Result<std::pair<size_t, size_t>> process_header(std::string const& data,
                                                      ProtocolCode genre);
 
-std::vector<int16_t> process_command(bytearray const& data, ProtocolCode genre);
+response_t process_command(std::string const& data, ProtocolCode genre);
 
-fp::Result<std::vector<int16_t>> process_received(bytearray const& data,
+fp::Result<response_t> process_received(std::string const& data,
                                                   ProtocolCode genre);
 
 }  // namespace mycobot

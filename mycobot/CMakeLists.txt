@@ -14,7 +14,6 @@ find_package(range-v3 REQUIRED)
 find_package(serial REQUIRED)
 
 add_library(${PROJECT_NAME}
-  src/bytearray.cpp
   src/command.cpp
   src/detect.cpp
   src/mycobot.cpp
@@ -34,12 +33,15 @@ target_link_libraries(${PROJECT_NAME}
     serial::serial
 )
 
+add_executable(wiggle bringup/wiggle.cpp)
+target_link_libraries(wiggle ${PROJECT_NAME})
+
 install(
   DIRECTORY include/
   DESTINATION include
 )
 install(
-  TARGETS ${PROJECT_NAME}
+  TARGETS ${PROJECT_NAME} wiggle
   EXPORT export_${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib

@@ -1,10 +1,7 @@
-
-#include <fmt/core.h>
-
+#include <string>
 #include <catch2/catch.hpp>
 #include <limits>
 
-#include "mycobot/bytearray.hpp"
 #include "mycobot/serialize.hpp"
 
 namespace mycobot {
@@ -18,12 +15,12 @@ SCENARIO("serialize functions serialize data for serial communication",
     WHEN("We encode the value") {
       auto const data = encode(value);
 
-      THEN("The data should be bytearray{value}") {
-        REQUIRE(data == bytearray{value});
+      THEN("The data should be std::string{value}") {
+        REQUIRE(data == std::string{value});
       }
     }
 
-    WHEN("We encode the value and convert it to a bytearray") {
+    WHEN("We encode the value and convert it to a std::string") {
       auto const encoded_data = encode(value);
 
       THEN("The encoded data should have a size of 1") {
@@ -48,13 +45,13 @@ SCENARIO("serialize functions serialize data for serial communication",
     WHEN("We encode the value") {
       auto const data = encode(value);
 
-      THEN("The data should be bytearray{(value >> 8) & 0xFF, value & 0xFF}") {
-        REQUIRE(data == bytearray{static_cast<char>((value >> 8) & 0xFF),
+      THEN("The data should be std::string{(value >> 8) & 0xFF, value & 0xFF}") {
+        REQUIRE(data == std::string{static_cast<char>((value >> 8) & 0xFF),
                                   static_cast<char>(value & 0xFF)});
       }
     }
 
-    WHEN("We encode the value and convert it to a bytearray") {
+    WHEN("We encode the value and convert it to a std::string") {
       auto const encoded_data = encode(value);
 
       THEN("The encoded data should have a size of 2") {
@@ -137,8 +134,8 @@ SCENARIO("serialize functions serialize data for serial communication",
     char const c = GENERATE(take(10, random(std::numeric_limits<char>::min(),
                                             std::numeric_limits<char>::max())));
 
-    WHEN("We use the variadic encode to encode them into a bytearray") {
-      bytearray const data = encode(a, b, c);
+    WHEN("We use the variadic encode to encode them into a std::string") {
+      std::string const data = encode(a, b, c);
 
       THEN("We expect the size to be 4") { REQUIRE(data.size() == 4); }
     }

@@ -5,7 +5,6 @@
 #include <string>
 #include <utility>
 
-#include "mycobot/bytearray.hpp"
 #include "mycobot/protocol_code.hpp"
 #include "mycobot/serialize.hpp"
 
@@ -13,12 +12,12 @@ namespace views = ::ranges::views;
 
 namespace mycobot {
 
-bytearray process_ssid_pwd_response(bytearray const& data) {
+std::string process_ssid_pwd_response(std::string const& data) {
   // TODO: implement this
   return data;
 }
 
-fp::Result<std::pair<size_t, size_t>> process_header(bytearray const& data,
+fp::Result<std::pair<size_t, size_t>> process_header(std::string const& data,
                                                      ProtocolCode genre) {
   // Get valid header: 0xfe0xfe<data_len><id == genre>
   constexpr size_t kHeaderSize = 4;
@@ -53,30 +52,30 @@ fp::Result<std::pair<size_t, size_t>> process_header(bytearray const& data,
   return std::make_pair(start_index, data_len);
 }
 
-std::vector<int16_t> process_command(bytearray const& data,
+response_t process_command(std::string const& data,
                                      ProtocolCode genre) {
   if (data.size() == 12 || data.size() == 8) {
     return data | views::chunk(2) | views::transform([](auto const& view) {
-             return decode_int16(view | ranges::to<bytearray>());
+             return decode_int16(view | ranges::to<std::string>());
            }) |
            ranges::to<std::vector>();
   } else if (data.size() == 2) {
     if (genre == ProtocolCode::IS_SERVO_ENABLE) {
-      return std::vector<int16_t>(
-          1, static_cast<int16_t>(decode_int8(bytearray{1, data.at(1)})));
+      return response_t(
+          1, static_cast<int16_t>(decode_int8(std::string{1, data.at(1)})));
     }
-    return std::vector<int16_t>(1, decode_int16(data));
+    return response_t(1, decode_int16(data));
   }
 
-  return std::vector<int16_t>(
-      1, static_cast<int16_t>(decode_int8(bytearray{1, data.at(0)})));
+  return response_t(
+      1, static_cast<int16_t>(decode_int8(std::string{1, data.at(0)})));
 }
 
-fp::Result<std::vector<int16_t>> process_received(bytearray const& data,
+fp::Result<response_t> process_received(std::string const& data,
                                                   ProtocolCode genre) {
   if (genre == ProtocolCode::GET_SSID_PWD) {
     auto const pwd = process_ssid_pwd_response(data);
-    return std::vector<int16_t>(pwd.begin(), pwd.end());
+    return response_t(pwd.begin(), pwd.end());
   }
 
   if (data.size() == 0) {
@@ -93,7 +92,7 @@ fp::Result<std::vector<int16_t>> process_received(bytearray const& data,
   // Process the command_data
   return process_command(data |
                              views::slice(start_index, start_index + data_len) |
-                             ranges::to<bytearray>(),
+                             ranges::to<std::string>(),
                          genre);
 }
 

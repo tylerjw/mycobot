@@ -3,13 +3,13 @@
 #include <array>
 #include <string>
 
-#include "mycobot/bytearray.hpp"
 #include "mycobot/protocol_code.hpp"
 
 namespace mycobot {
 
 struct Command {
-  bytearray data = {};
+  ProtocolCode genre;
+  std::string data = "";
   bool has_reply = false;
 };
 
@@ -37,7 +37,7 @@ Command resume();
 Command stop();
 Command set_encoder(int8_t joint_id, int16_t encoder);
 Command get_encoder(int8_t joint_id);
-Command set_encoders();
+Command set_encoders(std::array<int16_t, 6> encoders, int8_t speed);
 Command get_encoders();
 Command get_speed();
 Command set_speed(int8_t speed);

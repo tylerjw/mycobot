@@ -1,10 +1,9 @@
-
+#include <string>
 #include <array>
 #include <catch2/catch.hpp>
 #include <limits>
 #include <range/v3/all.hpp>
 
-#include "mycobot/bytearray.hpp"
 #include "mycobot/process_received.hpp"
 #include "mycobot/serialize.hpp"
 
@@ -16,7 +15,7 @@ SCENARIO("process received functions process received data from robot",
   GIVEN("A valid received to is power on") {
     auto const genre = ProtocolCode::IS_POWER_ON;
     auto const received =
-        bytearray{to_int8(ProtocolCode::HEADER), to_int8(ProtocolCode::HEADER),
+        std::string{to_int8(ProtocolCode::HEADER), to_int8(ProtocolCode::HEADER),
                   1, to_int8(genre), 1};
 
     WHEN("We process the header") {
@@ -43,7 +42,7 @@ SCENARIO("process received functions process received data from robot",
 
   GIVEN("A valid received to is power on that starts with some garbage") {
     auto const genre = ProtocolCode::IS_POWER_ON;
-    auto const received = bytearray{0,
+    auto const received = std::string{0,
                                     2,
                                     3,
                                     to_int8(ProtocolCode::HEADER),
@@ -78,7 +77,7 @@ SCENARIO("process received functions process received data from robot",
     auto const genre = ProtocolCode::GET_ENCODERS;
     std::array<int16_t, 6> encoder_values = {1, 2, 3, 4, 5, 6};
     auto const received = [&]() {
-      auto ret = bytearray{to_int8(ProtocolCode::HEADER),
+      auto ret = std::string{to_int8(ProtocolCode::HEADER),
                            to_int8(ProtocolCode::HEADER), 12, to_int8(genre)};
       for (auto const& value : encoder_values) {
         ret.append(encode(value));
