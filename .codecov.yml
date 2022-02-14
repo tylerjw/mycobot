@@ -1,0 +1,18 @@
+codecov:
+  require_ci_to_pass: no
+
+coverage:
+  status:
+    project:
+      default:
+        threshold: 3%
+
+ignore:
+  - "*/target_ws/build/*"
+  - "*/target_ws/install/*"
+  - "*/test/*"
+  - "*/third_party/*"
+  - "*/bringup/*"
+
+comment:
+  layout: "reach,diff,files,footer"

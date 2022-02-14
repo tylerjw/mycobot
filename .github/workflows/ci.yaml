@@ -1,0 +1,70 @@
+# This config uses industrial_ci (https://github.com/ros-industrial/industrial_ci.git).
+# For troubleshooting, see readme (https://github.com/ros-industrial/industrial_ci/blob/master/README.rst)
+
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  default:
+    strategy:
+      fail-fast: false
+      matrix:
+        env:
+          - NAME: "testing-ccov"
+            TARGET_CMAKE_ARGS: |
+              -DCMAKE_BUILD_TYPE=Debug
+              -DCMAKE_CXX_FLAGS='--coverage -fno-omit-frame-pointer'
+            CCOV: true
+          - NAME: "main"
+            ROS_REPO: main
+
+    env:
+      ROS_DISTRO: galactic
+      # Clear the ccache stats before and log the stats after the build
+      AFTER_SETUP_CCACHE: ccache --zero-stats --max-size=10.0G
+      AFTER_BUILD_TARGET_WORKSPACE: ccache --show-stats
+      UPSTREAM_WORKSPACE: upstream.repos
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      BASEDIR: ${{ github.workspace }}/.work
+
+    name: ${{ matrix.env.NAME }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: testspace-com/setup-testspace@v1
+        with:
+          domain: tylerjw
+      - name: Cache ccache
+        uses: pat-s/always-upload-cache@v2.1.5
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ${{ matrix.env.NAME }}-${{ github.sha }}-${{ github.run_id }}
+          restore-keys: |
+            ${{ matrix.env.NAME }}-${{ github.sha }}
+            ${{ matrix.env.NAME }}
+      - id: ici
+        name: Run industrial_ci
+        uses: ros-industrial/industrial_ci@master
+        env: ${{ matrix.env }}
+      - name: Push result to Testspace server
+        if: always()
+        run: |
+          testspace "[ ${{ matrix.env.NAME }} ]${{ env.BASEDIR }}/target_ws/**/test_results/**/*.xml" --link=codecov
+      - name: Generate codecov report
+        uses: rhaschke/lcov-action@main
+        if: matrix.env.CCOV && steps.ici.outputs.target_test_results == '0'
+        with:
+          docker: ros:rolling-ros-base-focal
+          workdir: ${{ env.BASEDIR }}/target_ws
+          ignore: '"*/target_ws/build/*" "*/target_ws/install/*" "*/test/*" "*/_external/*" "*/examples/*"'
+      - name: Upload codecov report
+        uses: codecov/codecov-action@v2
+        if: matrix.env.CCOV && steps.ici.outputs.target_test_results == '0'
+        with:
+          files: ${{ env.BASEDIR }}/target_ws/coverage.info
