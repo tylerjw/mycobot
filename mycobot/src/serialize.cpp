@@ -3,11 +3,8 @@
 #include <cppystruct/cppystruct.h>
 
 #include <fp/all.hpp>
-#include <range/v3/all.hpp>
 #include <string>
 #include <utility>
-
-namespace views = ::ranges::views;
 
 namespace mycobot {
 

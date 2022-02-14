@@ -24,8 +24,11 @@
     <ros2_control name="${name}" type="system">
       <hardware>
         <xacro:if value="${use_fake_hardware}">
-          <plugin>fake_components/GenericSystem</plugin>
+          <plugin>mycobot_hardware_interface/MyCobotHardwareInterface</plugin>
         </xacro:if>
+        <xacro:unless value="${use_fake_hardware}">
+          <plugin>mycobot_hardware_interface/MyCobotHardwareInterface</plugin>
+        </xacro:unless>
       </hardware>
 
       <joint name="${prefix}joint1">
@@ -37,7 +40,7 @@
           <!-- Initial position for the GenericSystem and simulation -->
           <param name="initial_value">${initial_positions['joint1']}</param>
         </state_interface>
-        <state_interface name="velocity"/>
+        <!-- <state_interface name="velocity"/> -->
 
       </joint>
       <joint name="${prefix}joint2">
@@ -49,7 +52,7 @@
           <!-- Initial position for the GenericSystem and simulation -->
           <param name="initial_value">${initial_positions['joint2']}</param>
         </state_interface>
-        <state_interface name="velocity"/>
+        <!-- <state_interface name="velocity"/> -->
       </joint>
 
       <joint name="${prefix}joint3">
@@ -61,7 +64,7 @@
           <!-- Initial position for the GenericSystem and simulation -->
           <param name="initial_value">${initial_positions['joint3']}</param>
         </state_interface>
-        <state_interface name="velocity"/>
+        <!-- <state_interface name="velocity"/> -->
       </joint>
 
       <joint name="${prefix}joint4">
@@ -73,7 +76,7 @@
           <!-- Initial position for the GenericSystem and simulation -->
           <param name="initial_value">${initial_positions['joint4']}</param>
         </state_interface>
-        <state_interface name="velocity"/>
+        <!-- <state_interface name="velocity"/> -->
       </joint>
 
       <joint name="${prefix}joint5">
@@ -85,7 +88,7 @@
           <!-- Initial position for the GenericSystem and simulation -->
           <param name="initial_value">${initial_positions['joint5']}</param>
         </state_interface>
-        <state_interface name="velocity"/>
+        <!-- <state_interface name="velocity"/> -->
       </joint>
 
       <joint name="${prefix}joint6">
@@ -97,7 +100,7 @@
           <!-- Initial position for the GenericSystem and simulation -->
           <param name="initial_value">${initial_positions['joint6']}</param>
         </state_interface>
-        <state_interface name="velocity"/>
+        <!-- <state_interface name="velocity"/> -->
       </joint>
 
     </ros2_control>

@@ -7,13 +7,14 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <thread>
 
 #include "mycobot/detect.hpp"
 
 namespace mycobot {
 namespace {
 auto constexpr kBaudrate = 115200;
-auto constexpr kTimeout = 500;  // Milliseconds
+auto constexpr kTimeout = 100;  // Milliseconds
 }  // namespace
 
 MyCobot::MyCobot(std::string const& port, uint32_t baudrate)
@@ -47,11 +48,10 @@ fp::Result<response_t> MyCobot::send(Command const& command) {
     }
 
     // Read the reply
-    std::string received_data;
+    std::vector<std::string> received_data;
     try {
-      // received_data = serial_port_->readline(65536,
-      //   encode(to_int8(ProtocolCode::FOOTER)));
-      received_data = serial_port_->read(1024);
+      received_data =
+          serial_port_->readlines(65536, encode(to_int8(ProtocolCode::FOOTER)));
     } catch (serial::PortNotOpenedException const& ex) {
       return tl::make_unexpected(fp::FailedPrecondition(
           fmt::format("Caught serial::PortNotOpenedException: {}", ex.what())));
@@ -60,13 +60,18 @@ fp::Result<response_t> MyCobot::send(Command const& command) {
           fmt::format("Caught serial::SerialException: {}", ex.what())));
     }
 
-    auto const response = process_received(received_data, command.genre);
+    fp::Error last_error;
+    for (auto const& line : received_data) {
+      auto const response = process_received(line, command.genre);
 
-    if (!response) {
-      return tl::make_unexpected(response.error());
+      if (!response) {
+        last_error = response.error();
+      } else {
+        return response.value();
+      }
     }
-
-    return response.value();
+    serial_port_->flushInput();
+    return tl::make_unexpected(last_error);
   }
 
   // Return an empty response_t if the command does not have a reply
@@ -103,7 +108,7 @@ fp::Result<response_t> MyCobot::send_radians(
       speed));
 }
 
-fp::Result<MyCobot> make_mycobot() {
+fp::Result<std::unique_ptr<serial::Serial>> make_serial_connection_to_robot() {
   auto const maybe_port = get_port_of_robot();
   if (!maybe_port) {
     return tl::make_unexpected(fp::NotFound("Port of MyCobot not found"));
@@ -122,7 +127,7 @@ fp::Result<MyCobot> make_mycobot() {
                     maybe_port.value())));
   }
 
-  return MyCobot(std::move(serial_port));
+  return serial_port;
 }
 
 }  // namespace mycobot

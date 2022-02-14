@@ -9,11 +9,14 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(fmt REQUIRED)
 find_package(fp REQUIRED)
-find_package(range-v3 REQUIRED)
+find_package(hardware_interface REQUIRED)
 find_package(mycobot REQUIRED)
+find_package(pluginlib REQUIRED)
+find_package(range-v3 REQUIRED)
+find_package(rclcpp REQUIRED)
 find_package(serial REQUIRED)
 
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} SHARED
   src/hardware_interface.cpp
 )
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)  # C++20
@@ -21,13 +24,20 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_link_libraries(${PROJECT_NAME}
-  PRIVATE
     fmt::fmt
     fp::fp
     range-v3::range-v3
     mycobot::mycobot
     serial::serial
+    pluginlib::pluginlib
+    rclcpp::rclcpp
 )
+ament_target_dependencies(${PROJECT_NAME}
+  hardware_interface
+)
+
+pluginlib_export_plugin_description_file(hardware_interface
+  hardware_interface_plugin.xml)
 
 install(
   DIRECTORY include/

@@ -11,8 +11,11 @@
 
   <depend>fmt</depend>
   <depend>fp</depend>
-  <depend>range-v3</depend>
+  <depend>hardware_interface</depend>
   <depend>mycobot</depend>
+  <depend>pluginlib</depend>
+  <depend>range-v3</depend>
+  <depend>rclcpp</depend>
   <depend>serial</depend>
 
   <export>

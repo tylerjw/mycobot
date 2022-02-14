@@ -13,13 +13,22 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>joint_state_broadcaster</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>joint_state_publisher_gui</exec_depend>
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
-  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>moveit_ros_move_group</exec_depend>
+  <exec_depend>moveit_simple_controller_manager</exec_depend>
+  <exec_depend>mycobot_hardware_interface</exec_depend>
   <exec_depend>rviz2</exec_depend>
   <exec_depend>urdf</exec_depend>
   <exec_depend>xacro</exec_depend>
+  <exec_depend>joint_trajectory_controller</exec_depend>
+  <exec_depend>backward_ros</exec_depend>
+  <exec_depend>ompl</exec_depend>
+  <exec_depend>moveit</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

@@ -1,0 +1,9 @@
+<library path="mycobot_hardware_interface">
+  <class name="mycobot_hardware_interface/MyCobotHardwareInterface"
+         type="mycobot::MyCobotHardwareInterface"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      The ROS2 Control for the MyCobot robot protocol.
+    </description>
+  </class>
+</library>

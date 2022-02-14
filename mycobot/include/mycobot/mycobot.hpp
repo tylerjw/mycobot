@@ -63,10 +63,11 @@ class MyCobot {
 };
 
 /**
- * @brief      Attempt to create a MyCobot by auto-detecting the port
+ * @brief      Attempt to create a Serial coonection to robot by auto-detecting
+ * the port
  *
- * @return     MyCobot or Error
+ * @return     Serial coonection to robot or Error
  */
-fp::Result<MyCobot> make_mycobot();
+fp::Result<std::unique_ptr<serial::Serial>> make_serial_connection_to_robot();
 
 }  // namespace mycobot
