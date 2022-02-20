@@ -13,7 +13,6 @@
 * mycobot - C++ interface to MyCobot
 * mycobot_280_description - Configs and launch files for running MoveIt with MyCobot 280
 * mycobot_hardware_interface - ros2_control hardware interface for mycobot
-* third_party - catch2 and cppystruct
 
 ```bash
 ros2 launch mycobot_280_description move_group.launch.py

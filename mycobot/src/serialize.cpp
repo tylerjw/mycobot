@@ -1,7 +1,5 @@
 #include "mycobot/serialize.hpp"
 
-#include <cppystruct/cppystruct.h>
-
 #include <fp/all.hpp>
 #include <string>
 #include <utility>
@@ -9,30 +7,22 @@
 namespace mycobot {
 
 int8_t decode_int8(std::string const& data) {
-  return std::get<0>(pystruct::unpack(
-      PY_STRING("b"),
-      std::string_view(reinterpret_cast<char const*>(data.data()),
-                       data.size())));
+  return static_cast<int8_t>(data.at(0));
 }
 
 int16_t decode_int16(std::string const& data) {
-  return std::get<0>(pystruct::unpack(
-      PY_STRING(">h"),
-      std::string_view(reinterpret_cast<char const*>(data.data()),
-                       data.size())));
+  auto const msb = static_cast<int16_t>(static_cast<uint16_t>(data.at(0)) << 8);
+  auto const lsb = static_cast<int16_t>(data.at(1) & 0xff);
+  return msb + lsb;
 }
 
-std::string encode(char data) {
-  return std::string(1, pystruct::pack(PY_STRING("b"), data)[0]);
-}
+std::string encode(char data) { return std::string(1, data); }
 
-std::string encode(int8_t data) {
-  return std::string(1, pystruct::pack(PY_STRING("b"), data)[0]);
-}
+std::string encode(int8_t data) { return std::string(1, data); }
 
 std::string encode(int16_t data) {
-  auto const packed_data = pystruct::pack(PY_STRING(">h"), data);
-  return std::string{packed_data[0], packed_data[1]};
+  return std::string{static_cast<char>((data >> 8) & 0xFF),
+                     static_cast<char>(data & 0xFF)};
 }
 
 std::string format_msg(std::string const& data) {

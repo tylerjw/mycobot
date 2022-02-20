@@ -9,7 +9,6 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <depend>cppystruct</depend>
   <depend>fmt</depend>
   <depend>fp</depend>
   <depend>hardware_interface</depend>

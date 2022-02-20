@@ -7,7 +7,6 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(cppystruct REQUIRED)
 find_package(fmt REQUIRED)
 find_package(fp REQUIRED)
 find_package(range-v3 REQUIRED)
@@ -28,7 +27,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<INSTALL_INTERFACE:include>)
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
-    cppystruct::cppystruct
     fmt::fmt
     range-v3::range-v3
   PUBLIC

@@ -7,7 +7,6 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(cppystruct REQUIRED)
 find_package(fmt REQUIRED)
 find_package(fp REQUIRED)
 find_package(hardware_interface REQUIRED)
@@ -25,7 +24,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_link_libraries(${PROJECT_NAME}
-    cppystruct::cppystruct
     fmt::fmt
     fp::fp
     mycobot::mycobot
